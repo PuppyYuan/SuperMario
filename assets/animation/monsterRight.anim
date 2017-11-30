@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "monsterRight",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 1.0166666666666666,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "5b4b66ed-88ef-4af0-a8e3-42f01149d21f"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "0f92fa6d-5b31-411d-9440-addd8a5c9b59"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "33b5fd01-c2ee-478f-9aab-5785b325e9d6"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "a0d75159-f570-4bf4-a09e-ab0d7f8057d7"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "9b0e73ab-304d-4022-a093-943dfd5c5c41"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

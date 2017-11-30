@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "monsterLeft",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 1.0166666666666666,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "0023d113-f429-490f-a338-9ad1025034f6"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "2439e69a-e956-4c67-b6e7-58593cf10a7c"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "89ae6a70-f34d-48fa-8e3e-257e666b0026"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "3329402e-98f0-45d7-80bf-4552dae9f2e8"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "098ce1c4-df5b-42ad-9f2a-ccad06f498eb"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
