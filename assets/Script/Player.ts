@@ -99,6 +99,7 @@ export default class Player extends cc.Component {
     _drag_flag = false;
 
     onLoad() {
+
         this._anim = this.getComponent(cc.Animation);
         this._body = this.getComponent(cc.RigidBody);
         this._sprite = this.getComponent(cc.Sprite);
