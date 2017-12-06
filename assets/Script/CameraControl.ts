@@ -29,6 +29,11 @@ export default class CameraControl extends cc.Component {
         if(newPos.x <= winSize.width / 2){
             newPos.x = winSize.width / 2;
         }
+
+        if(newPos.x >= 11400){
+            newPos.x = 11400;
+        }
+        
         newPos.y =  winSize.height / 2;
         this.node.position = newPos;
 

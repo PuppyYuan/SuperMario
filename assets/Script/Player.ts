@@ -95,6 +95,9 @@ export default class Player extends cc.Component {
     @property
     _land_flag = true;
 
+    @property
+    _drag_flag = false;
+
     onLoad() {
         this._anim = this.getComponent(cc.Animation);
         this._body = this.getComponent(cc.RigidBody);
@@ -106,90 +109,78 @@ export default class Player extends cc.Component {
 
     update(dt) {
 
-        // let speed = this._body.linearVelocity;
-
-        // if (this._moveFlag === MoveFlag.Left) {
-
-        //     speed.x -= this.acceleration * dt;
-        //     if (speed.x < -this.maxSpeed) {
-        //         speed.x = -this.maxSpeed;
-        //     }
-        // } else if (this._moveFlag === MoveFlag.Right) {
-
-        //     speed.x += this.acceleration * dt;
-        //     if (speed.x > this.maxSpeed) {
-        //         speed.x = this.maxSpeed;
-        //     }
-        // } else {
-        //     if (speed.x != 0) {
-        //         let d = this.drag * dt;
-        //         if (Math.abs(speed.x) <= d) {
-        //             speed.x = 0;
-        //         } else {
-        //             speed.x -= speed.x > 0 ? d : -d;
-        //         }
-        //     }
-        // }
-
-        // if(this._up && Math.abs(speed.y) < 1){
-        //     speed.y = this.jumpSpeed;
-        //     cc.audioEngine.playEffect(this.jumpAudio, false, 0.5);
-        // }
-
-        // this._up = false;
-        // this._body.linearVelocity = speed;
-
         let speed = this._body.linearVelocity;
 
-        // 左方向
-        if (this._key_pressed[cc.KEY.a] && !this._key_pressed[cc.KEY.w]) {
-            this.playerState = PlayerState.smallMarioLeftRun;
-            this._moveFlag = MoveFlag.Left;
-            speed.x -= this.acceleration * dt;
-            if (speed.x < -this.maxSpeed) {
-                speed.x = -this.maxSpeed;
-            }
-        }
+        if (this._drag_flag) {
+            cc.director.targetOff(this);
 
-        // 右方向
-        if (this._key_pressed[cc.KEY.d] && !this._key_pressed[cc.KEY.w]) {
             this.playerState = PlayerState.smallMarioRightRun;
             this._moveFlag = MoveFlag.Right;
-            speed.x += this.acceleration * dt;
-            if (speed.x > this.maxSpeed) {
-                speed.x = this.maxSpeed;
+            speed.x = 300;
+        } else {
+
+            // 左方向
+            if (this._key_pressed[cc.KEY.a] && !this._key_pressed[cc.KEY.w]) {
+                this.playerState = PlayerState.smallMarioLeftRun;
+                this._moveFlag = MoveFlag.Left;
+                speed.x -= this.acceleration * dt;
+                if (speed.x < -this.maxSpeed) {
+                    speed.x = -this.maxSpeed;
+                }
+            }
+
+            // 右方向
+            if (this._key_pressed[cc.KEY.d] && !this._key_pressed[cc.KEY.w]) {
+                this.playerState = PlayerState.smallMarioRightRun;
+                this._moveFlag = MoveFlag.Right;
+                speed.x += this.acceleration * dt;
+                if (speed.x > this.maxSpeed) {
+                    speed.x = this.maxSpeed;
+                }
+            }
+
+            if (!this._key_pressed[cc.KEY.d] && !this._key_pressed[cc.KEY.a]
+                && Math.abs(speed.x) < 200 && !this._key_pressed[cc.KEY.w]) {
+                this.playerState = PlayerState.None;
+                if (this._moveFlag === MoveFlag.Left)
+                    this._sprite.spriteFrame = this.leftStandSpriteFrame;
+                if (this._moveFlag === MoveFlag.Right)
+                    this._sprite.spriteFrame = this.rightStandSpritFrame;
+
+                // this._moveFlag = MoveFlag.None;
+            }
+
+            if (this._key_pressed[cc.KEY.w]) {
+                if (this._moveFlag === MoveFlag.Left)
+                    this.playerState = PlayerState.smallMarioLeftJump;
+                if (this._moveFlag === MoveFlag.Right)
+                    this.playerState = PlayerState.smallMarioRightJump;
+
+                if (Math.abs(speed.y) < 1 && this._land_flag) {
+                    speed.y = this.jumpSpeed;
+                    cc.audioEngine.playEffect(this.jumpAudio, false, 0.3);
+                    this._land_flag = false;
+                }
+            }
+
+        }
+
+        if (this.node.x >= 10450) {
+            speed.x = 0;
+            this.node.opacity -= 100 * dt;
+            if (this.node.opacity <= 0) {
+                this.node.opacity = 0;
+                this.game.gameOver();
             }
         }
-
-        if (!this._key_pressed[cc.KEY.d] && !this._key_pressed[cc.KEY.a]
-            && Math.abs(speed.x) < 200 && !this._key_pressed[cc.KEY.w]) {
-            this.playerState = PlayerState.None;
-            if (this._moveFlag === MoveFlag.Left)
-                this._sprite.spriteFrame = this.leftStandSpriteFrame;
-            if (this._moveFlag === MoveFlag.Right)
-                this._sprite.spriteFrame = this.rightStandSpritFrame;
-
-            // this._moveFlag = MoveFlag.None;
-        }
-
-        if (this._key_pressed[cc.KEY.w]) {
-            if (this._moveFlag === MoveFlag.Left)
-                this.playerState = PlayerState.smallMarioLeftJump;
-            if (this._moveFlag === MoveFlag.Right)
-                this.playerState = PlayerState.smallMarioRightJump;
-
-            if (Math.abs(speed.y) < 1 && this._land_flag) {
-                speed.y = this.jumpSpeed;
-                cc.audioEngine.playEffect(this.jumpAudio, false, 0.3);
-                this._land_flag = false;
-            }
-        }
-
-        this._body.linearVelocity = speed;
 
         if (this.node.y <= -cc.winSize.height / 2) {
             this.game.gameOver();
         }
+
+        this._body.linearVelocity = speed;
+
+
     }
 
     onKeyDown(event) {

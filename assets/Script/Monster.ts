@@ -13,17 +13,13 @@ export default class Monster extends cc.Component {
     @property({
         type: cc.Enum(MoveDirection)
     })
-    _move_direction: MoveDirection = MoveDirection.monsterRight;
+    move_direction: MoveDirection = MoveDirection.monsterLeft;
 
-    get move_direction() {
-        return this._move_direction;
-    }
-
-    set move_direction(value) {
-        if (value !== this._move_direction) {
-            this._move_direction = value;
-            if (this._move_direction !== MoveDirection.None) {
-                let animName = MoveDirection[this._move_direction];
+    setMoveDirection(value) {
+        if (value !== this.move_direction) {
+            this.move_direction = value;
+            if (this.move_direction !== MoveDirection.None) {
+                let animName = MoveDirection[this.move_direction];
                 this._anim.stop();
                 this._anim.play(animName);
             }
@@ -39,10 +35,15 @@ export default class Monster extends cc.Component {
     @property(cc.RigidBody)
     _body: cc.RigidBody = null;
 
+    @property(cc.AudioClip)
+    dieAudioClip: cc.AudioClip = null;
+
     onLoad() {
         this._anim = this.getComponent(cc.Animation);
         this._body = this.getComponent(cc.RigidBody);
         this._body.linearVelocity.x = this.speed;
+
+        this._anim.play(MoveDirection[this.move_direction]);
     }
 
     update() {
@@ -57,22 +58,27 @@ export default class Monster extends cc.Component {
         }
 
         this._body.linearVelocity = speed;
+
+        if(this.node.y <= -cc.winSize.height / 2){
+            this.node.destroy();
+        }
     }
 
     onBeginContact(contact, selfCollider, otherCollider) {
         let group = cc.game.groupList[otherCollider.node.groupIndex];
-        if (group === 'pipe') {
+        if (group === 'pipe' || group === 'monster') {
             if (this.move_direction === MoveDirection.monsterLeft) {
-                this.move_direction = MoveDirection.monsterRight;
+                this.setMoveDirection(MoveDirection.monsterRight);
             } else {
-                this.move_direction = MoveDirection.monsterLeft;
+                this.setMoveDirection(MoveDirection.monsterLeft);
             }
         } else if (group === 'player') {
             let manifold = contact.getWorldManifold();
             let normal = manifold.normal;
 
             if (normal.y === 1) {
-                this.move_direction = MoveDirection.monsterDead;
+                cc.audioEngine.playEffect(this.dieAudioClip, false, 0.5);
+                this.setMoveDirection(MoveDirection.monsterDead);
             } else if(normal.y !== 1 && (normal.x === 1 || normal.x === -1)){
                 otherCollider.getComponent('Player').game.gameOver();
             }
