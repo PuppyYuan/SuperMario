@@ -1,6 +1,7 @@
 {
   "appKey": "",
   "appSecret": "",
+  "encryptJs": true,
   "excludeScenes": [
     "c90e2e2a-b134-41f7-a8c7-37b774b28fb8"
   ],
@@ -23,6 +24,11 @@
   "privateKey": "",
   "renderMode": "0",
   "startScene": "ad1c566d-0f2d-4267-a195-0cf6ce44ae97",
-  "title": "hello_world",
-  "webOrientation": "auto"
+  "title": "super_mario",
+  "webOrientation": "auto",
+  "wechatgame": {
+    "appid": "",
+    "orientation": "portrait"
+  },
+  "xxteaKey": "5f8f5d28-b5eb-4b"
 }
